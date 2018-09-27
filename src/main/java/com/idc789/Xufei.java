@@ -1,5 +1,6 @@
 package com.idc789;
 
+import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.DomElement;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
@@ -9,7 +10,6 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -21,22 +21,13 @@ public class Xufei {
 
     private static Log log = LogFactory.getLog(Xufei.class);
 
-    @Resource
-    private ClientGetter clientGetter;
-
     @Scheduled(cron = "0 0 0/6 * * *")
     public void operate() {
         WebClient webClient = null;
         try {
-            while (true) {
-                webClient = clientGetter.getWebClient();
-                if (webClient == null) {
-                    log.info("30秒后重试");
-                    Thread.sleep(30000);
-                } else {
-                    break;
-                }
-            }
+            webClient = new WebClient(BrowserVersion.CHROME);
+            webClient.getOptions().setJavaScriptEnabled(false);
+            webClient.getOptions().setCssEnabled(false);
             Calendar calendar = Calendar.getInstance();
             calendar.add(Calendar.DAY_OF_YEAR, 1);
             calendar.set(Calendar.HOUR_OF_DAY, 0);
