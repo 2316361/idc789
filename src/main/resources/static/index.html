@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>key生成</title>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+</head>
+<body>
+<label for="jqm">机器码：</label>
+<input type="text" id="jqm"/>
+<button id="generate">生成key</button>
+</body>
+<script>
+    $("#generate").click(function () {
+        $.get("/generate?jqm=" + $("#jqm").val(), function (data) {
+            let url = window.URL.createObjectURL(new Blob([data]));
+            let link = document.createElement("a");
+            link.style.display = "none";
+            link.href = url;
+            link.setAttribute("download", "key");
+            document.body.appendChild(link);
+            link.click();
+        });
+    });
+</script>
+</html>
