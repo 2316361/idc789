@@ -23,7 +23,7 @@ public class Xufei {
     
     @Scheduled(cron = "0 0 0/6 * * *")
     public void operate() {
-        String url = "http://www.idc789.com:8080";
+        String url = "http://58.221.47.5";
         WebClient webClient = null;
         try {
             webClient = new WebClient(BrowserVersion.CHROME);
