@@ -20,9 +20,10 @@ import java.util.List;
 public class Xufei {
 
     private static Log log = LogFactory.getLog(Xufei.class);
-
+    
     @Scheduled(cron = "0 0 0/6 * * *")
     public void operate() {
+        String url = "http://www.idc789.com:8080";
         WebClient webClient = null;
         try {
             webClient = new WebClient(BrowserVersion.CHROME);
@@ -35,14 +36,14 @@ public class Xufei {
             calendar.set(Calendar.SECOND, 0);
             calendar.set(Calendar.MILLISECOND, 0);
             long renewalTime = calendar.getTimeInMillis();
-            HtmlPage htmlPage = webClient.getPage("http://www.idc789.com/idc/top_login.asp");
+            HtmlPage htmlPage = webClient.getPage(url + "/idc/top_login.asp");
             input(htmlPage, "username", "2316361");
             input(htmlPage,"password", "3211348");
             DomElement domElement = htmlPage.getElementById("login");
             htmlPage = domElement.click();
             if (htmlPage.getElementsByTagName("script").get(0).asXml().contains("top.location='/default.asp'")) {
                 log.info("登录成功");
-                htmlPage = webClient.getPage("http://www.idc789.com/user/vpsadm.asp");
+                htmlPage = webClient.getPage(url + "/user/vpsadm.asp");
                 DomElement hostTable = null;
                 for (DomElement temp : htmlPage.getElementsByTagName("table")) {
                     if (temp.getAttribute("bgcolor").equals("#CCCCCC")) {
@@ -69,9 +70,9 @@ public class Xufei {
                             log.info(name + "无需续费");
                         } else {
                             String vpsId = tdList.get(0).getElementsByTagName("input").get(0).getAttribute("value");
-                            webClient.getPage("http://www.idc789.com/vpsadm/selfvpsmodifyrepay_first.asp?id=" + vpsId);
+                            webClient.getPage(url + "/vpsadm/selfvpsmodifyrepay_first.asp?id=" + vpsId);
                             Thread.sleep(5000);
-                            htmlPage = webClient.getPage("http://www.idc789.com/vpsadm/selfvpsmodifyrepay.asp?id=" + vpsId);
+                            htmlPage = webClient.getPage(url + "/vpsadm/selfvpsmodifyrepay.asp?id=" + vpsId);
                             List<DomElement> elementList = htmlPage.getElementsByName("year");
                             for (DomElement element : elementList) {
                                 if (element.getAttribute("value").equals("9001")) {
